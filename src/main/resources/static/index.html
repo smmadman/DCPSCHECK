@@ -193,16 +193,15 @@
             const payload = {
                 urlA: document.getElementById('urlA').value,
                 urlB: document.getElementById('urlB').value,
-                headerA: JSON.parse(document.getElementById('headerA').value),
-                headerB: JSON.parse(document.getElementById('headerB').value),
+                headerA: document.getElementById('headerA').value,
+                headerB: document.getElementById('headerB').value,
                 payloadA: isSamePayload ?
-                    JSON.parse(document.getElementById('commonPayload').value) :
-                    JSON.parse(document.getElementById('payloadA').value)
+                    document.getElementById('commonPayload').value :
+                    document.getElementById('payloadA').value,
+                payloadB: isSamePayload ?
+                    document.getElementById('commonPayload').value :
+                    document.getElementById('payloadB').value
             };
-
-            if (!isSamePayload) {
-                payloadB = JSON.parse(document.getElementById('payloadB').value);
-            }
 
             try {
                 const response = await fetch('/api/send-request', {

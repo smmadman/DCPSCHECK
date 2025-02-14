@@ -23,17 +23,17 @@ public class CompareService {
 
     public Map<String, Object> sendToBothClusters(String urlA, String urlB,
                                                   Map<String,Object> headerA, Map<String,Object> headerB,
-                                                  Map<String, Object> payloadA, Map<String, Object> payloadB) {
+                                                  String payloadA,String payloadB) {
         try {
             // 保存URL历史
 //            saveUrlHistory(urlA);
 //            saveUrlHistory(urlB);
 
-            String resultA = httpPostRequest.executePostRequest(urlA, headerA, payloadA.toString());
-            String resultB = httpPostRequest.executePostRequest(urlB, headerB, payloadB.toString());
+            String resultA = httpPostRequest.executePostRequest(urlA, headerA, payloadA);
+            String resultB = httpPostRequest.executePostRequest(urlB, headerB, payloadB);
 
             System.out.println("resultA: " + resultA);
-            System.out.println("resultA: " + resultB);
+            System.out.println("resultB: " + resultB);
 //            // 并行发送请求
 //            Future<Map<String, Object>> futureA = executor.submit(() ->
 //                sendRequest(urlA, payloadA));
