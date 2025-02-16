@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>集群对比系统</title>
-    <link rel="stylesheet" href="maincss.css">
-    <script src="diff.min.js"></script>
+    <title>报文数据对比</title>
+    <script src="css/maincss.css"></script>
+    <script type="text/javascript" src="js/diff.min.js"></script>
+    <script src="https://cdn.rawgit.com/otakustay/diff2html/master/diff2html.js"></script>
 <!--    <script src="https://cdn.tailwindcss.com"></script>-->
 <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/diff/5.0.0/diff.min.js"></script> -->
     <style>
@@ -215,19 +216,29 @@
 
                 const result = await response.json(); 
                 formattedResponses = { A: formattedResonse(result.resultA), B: formattedResonse(result.resultB) };
-                differences = createTwoFilesPatch('A', 'B', result.resultA, result.resultB);
-                displayResponses();
+                differences = JsDiff.createTwoFilesPatch('A', 'B', result.resultA, result.resultB);
+                displayResponses(differences);
             } catch (error) {
                 console.error('请求失败:', error);
             }
         }
 
-        function displayResponses() {
+        function displayResponses(diff) {
             const responseA = document.getElementById('responseA');
             const responseB = document.getElementById('responseB');
 
             responseA.innerHTML = formattedResonse(formattedResponses.A);
-            responseB.innerHTML = formattedResonse(formattedResponses.B);
+            // responseB.innerHTML = formattedResonse(formattedResponses.B);
+
+            responseB.innerHTML = Diff2Html.html(diff, {
+                inputFormat: "diff",
+                showFiles: true,
+                matching: "lines",
+                highlight: true,
+                outputFormat: "side-by-side",
+            });
+
+
         }
 
         function headAFillDefaultValue(event) {
