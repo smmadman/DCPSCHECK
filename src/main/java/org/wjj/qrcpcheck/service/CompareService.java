@@ -29,27 +29,29 @@ public class CompareService {
 //            saveUrlHistory(urlA);
 //            saveUrlHistory(urlB);
 
-            String resultA = httpPostRequest.executePostRequest(urlA, headerA, payloadA);
-            String resultB = httpPostRequest.executePostRequest(urlB, headerB, payloadB);
+//            String resultA = httpPostRequest.executePostRequest(urlA, headerA, payloadA);
+//            String resultB = httpPostRequest.executePostRequest(urlB, headerB, payloadB);
+
+
+//            // 并行发送请求
+            Future<String> futureA = executor.submit(() ->
+                    httpPostRequest.executePostRequest(urlA, headerA, payloadA));
+            Future<String> futureB = executor.submit(() ->
+                    httpPostRequest.executePostRequest(urlB, headerB, payloadB));
+//
+            String resultA = futureA.get(5, TimeUnit.SECONDS);
+            String resultB = futureB.get(5, TimeUnit.SECONDS);
 
             System.out.println("resultA: " + resultA);
             System.out.println("resultB: " + resultB);
-//            // 并行发送请求
-//            Future<Map<String, Object>> futureA = executor.submit(() ->
-//                sendRequest(urlA, payloadA));
-//            Future<Map<String, Object>> futureB = executor.submit(() ->
-//                sendRequest(urlB, payloadB));
-//
-//            Map<String, Object> resultA = futureA.get(5, TimeUnit.SECONDS);
-//            Map<String, Object> resultB = futureB.get(5, TimeUnit.SECONDS);
 //
 //            // 结果对比
 //            Map<String, Object> diff = compareResults(resultA, resultB);
             Map<String, Object> myMap = new HashMap<>();
             myMap.put("status", "success");
-            myMap.put("resultA", "resultA");
-            myMap.put("resultB", "resultB");
-            myMap.put("differences", "diff");
+            myMap.put("resultA", resultA);
+            myMap.put("resultB", resultB);
+//            myMap.put("differences", "diff");
 
             return  myMap;
         } catch (Exception e) {

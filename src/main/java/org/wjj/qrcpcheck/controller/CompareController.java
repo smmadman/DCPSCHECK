@@ -39,15 +39,18 @@ public class CompareController {
             return myMap;
     }
 
-//    @PostMapping("/request-debug")
-//    public void showReuqest(@RequestBody HttpRequest request){
-//        System.out.println("request-debug: " + request.toString());
-//    }
-//
-//    @PostMapping("/request-debug2")
-//    public void showReuqest2(@RequestBody HttpRequest request){
-//        System.out.println("request-debug2: " + request.toString());
-//    }
+    @PostMapping("/requestA")
+    public String showReuqest(@RequestBody String request) throws InterruptedException {
+        System.out.println("request-debug: " + request.toString());
+//        Thread.sleep(10000);
+        return "{\"message\":\"request-debug接口成功接收POST请求!\",\"requestBody\":" + request.toString() + "}";
+    }
+
+    @PostMapping("/requestB")
+    public String showReuqest2(@RequestBody String request){
+        System.out.println("request-debug2: " + request.toString());
+        return "{\"message\":\"request-debug2接口成功接收POST请求!\",\"requestBody\":" + request.toString() + "}";
+    }
 
 //    @GetMapping("/url-history")
 //    public java.util.List<String> getUrlHistory() {
