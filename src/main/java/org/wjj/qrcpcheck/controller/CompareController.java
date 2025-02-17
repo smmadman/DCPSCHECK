@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wjj.qrcpcheck.service.CompareService;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ public class CompareController {
 
     @PostMapping("/requestA")
     public String showReuqest(@RequestBody String request) throws InterruptedException {
+        request.getBytes(StandardCharsets.UTF_8);
         System.out.println("request-debug: " + request.toString());
 //        Thread.sleep(10000);
         return "{\"message\":\"request-debug接口成功接收POST请求!\",\"requestBody\":" + request.toString() + "}";
@@ -49,6 +51,7 @@ public class CompareController {
     @PostMapping("/requestB")
     public String showReuqest2(@RequestBody String request){
         System.out.println("request-debug2: " + request.toString());
+        request.getBytes(StandardCharsets.UTF_8);
         return "{\"message\":\"request-debug2接口成功接收POST请求!\",\"requestBody\":" + request.toString() + "}";
     }
 
