@@ -1,5 +1,6 @@
 package org.wjj.qrcpcheck.util;
 
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -10,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 //@Async
@@ -33,12 +35,14 @@ public class HttpPostRequest {
         HttpPost request = new HttpPost(url);
 
         // 设置请求体
-        StringEntity params = new StringEntity(requestBody);
+        StringEntity params = new StringEntity(requestBody, StandardCharsets.UTF_8);
         if(headerMap != null){
             headerMap.forEach((key, value)-> {
-               request.setHeader(key, value.toString());
+               request.addHeader(key, value.toString());
             }); //
         }
+        request.addHeader("Content-Type", "application/json; charset=utf-8");
+        request.addHeader("Accept", "application/json; charset=utf-8");
         request.setEntity(params);
 
         // 发送请求，并获取响应

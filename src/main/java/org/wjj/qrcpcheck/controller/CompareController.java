@@ -5,11 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.ls.LSException;
 import org.wjj.qrcpcheck.service.CompareService;
+import org.wjj.qrcpcheck.service.DBService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,6 +21,8 @@ public class CompareController {
     
     @Autowired
     private CompareService compareService;
+    @Autowired
+    private DBService dbService;
 
     @PostMapping("/send-request")
     public Map<String, Object> sendRequest(@RequestBody Map<String, Object> request) {
@@ -58,13 +63,17 @@ public class CompareController {
 //        return compareService.getUrlHistory();
 //    }
 //
-//    @PostMapping("/connect-db")
-//    public Map<String, Object> connectDatabase(@RequestBody Map<String, String> config) {
-//        return compareService.connectDatabase(
-//            config.get("env"),
-//            config.get("url"),
-//            config.get("username"),
-//            config.get("password")
-//        );
-//    }
+    @PostMapping("/connect-db")
+    public Map<String, Object> connectDatabase(@RequestBody Map<String, String> config) {
+        String url = config.get("url");
+        String username = config.get("username");
+        String password = config.get("password");
+        String dbType = config.get("dbType");
+        List<String> tablesName = dbService.getTableNames(url, username, password);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("tablesName", tablesName);
+        return result;
+    }
 }

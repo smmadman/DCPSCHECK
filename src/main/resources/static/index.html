@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,169 +13,274 @@
     <script type="text/javascript" src="js/diff2html.min.js"></script>
     <script type="text/javascript" src="js/diff2html-ui.min.js"></script>
 
-<!--    <script src="https://cdn.tailwindcss.com"></script>-->
-<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/diff/5.0.0/diff.min.js"></script> -->
+    <!--    <script src="https://cdn.tailwindcss.com"></script>-->
+    <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/diff/5.0.0/diff.min.js"></script> -->
     <style>
-        .d2h-code-side-linenumber{
+        .d2h-code-side-linenumber {
             position: relative;
         }
-        .diff-added { background-color: #dcfce7; }
-        .diff-removed { background-color: #fee2e2; }
-        .diff-modified { background-color: #fef9c3; }
-        .json-key { color: #4a5568; font-weight: 600; }
-        .json-string { color: #2b6cb0; }
-        .json-number { color: #38a169; }
+
+        .diff-added {
+            background-color: #dcfce7;
+        }
+
+        .diff-removed {
+            background-color: #fee2e2;
+        }
+
+        .diff-modified {
+            background-color: #fef9c3;
+        }
+
+        .json-key {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .json-string {
+            color: #2b6cb0;
+        }
+
+        .json-number {
+            color: #38a169;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50">
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">报文对比平台</h1>
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">报文对比平台</h1>
 
-    <!-- 模式切换 -->
-    <div class="mb-4 flex gap-4">
-        <button id="modeToggle" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-            切换为不同报文模式
-        </button>
-    </div>
+        <!-- 模式切换 -->
+        <div class="mb-4 flex gap-4">
+            <button id="modeToggle"
+                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                切换为不同报文模式
+            </button>
+        </div>
 
-    <div class="grid grid-cols-2 gap-6">
-        <!-- 环境A -->
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h2 class="text-xl font-semibold mb-4 text-red-600">环境A</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">请求URL</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="urlA" class="flex-1 p-2 border rounded"
-                               placeholder="http://127.0.0.1:8080/api/requestA" onkeypress="urlAFillDefaultValue(event)" list="urlHistory">
+        <div class="grid grid-cols-2 gap-6">
+            <!-- 环境A -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-xl font-semibold mb-4 text-red-600">环境A</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">请求URL</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="urlA" class="flex-1 p-2 border rounded"
+                                placeholder="http://127.0.0.1:8080/api/requestA"
+                                onkeypress="urlAFillDefaultValue(event)" list="urlHistory">
+                        </div>
+                        <label class="block text-sm font-medium mb-1">请求头</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="headerA" class="flex-1 p-2 border rounded"
+                                placeholder='{"Content-Type": "application/json"}'
+                                onkeypress="headAFillDefaultValue(event)" list="urlHistory">
+                        </div>
                     </div>
-                    <label class="block text-sm font-medium mb-1">请求头</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="headerA" class="flex-1 p-2 border rounded"
-                               placeholder='{"Content-Type": "application/json"}' onkeypress="headAFillDefaultValue(event)" list="urlHistory">
+                    <div id="payloadSectionA" class="hidden">
+                        <label class="block text-sm font-medium mb-1">专属请求报文</label>
+                        <textarea id="payloadA" class="w-full p-2 border rounded h-40 font-mono " maxlength="10000"
+                            placeholder='{"key": "value"}'></textarea>
                     </div>
                 </div>
-                <div id="payloadSectionA" class="hidden">
-                    <label class="block text-sm font-medium mb-1">专属请求报文</label>
-                    <textarea id="payloadA" class="w-full p-2 border rounded h-40 font-mono " maxlength="10000"
-                              placeholder='{"key": "value"}'></textarea>
+            </div>
+
+            <!-- 环境B -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-xl font-semibold mb-4 text-green-600">环境B</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">请求URL</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="urlB" class="flex-1 p-2 border rounded"
+                                placeholder="http://127.0.0.1:8080/api/requestB"
+                                onkeypress="urlBFillDefaultValue(event)">
+                        </div>
+                        <label class="block text-sm font-medium mb-1">请求头</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="headerB" class="flex-1 p-2 border rounded"
+                                placeholder='{"Content-Type": "application/json"}'
+                                onkeypress="headBFillDefaultValue(event)" list="urlHistory">
+                        </div>
+                    </div>
+                    <div id="payloadSectionB" class="hidden">
+                        <label class="block text-sm font-medium mb-1">专属请求报文</label>
+                        <textarea id="payloadB" class="w-full p-2 border rounded h-40 font-mono" maxlength="10000"
+                            placeholder='{"key": "value"}'></textarea>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- 公共报文区域 -->
+        <div id="commonPayloadSection" class="col-span-2 bg-white p-6 rounded-xl shadow-sm">
+            <label class="block text-sm font-medium mb-1">公共请求报文</label>
+            <textarea id="commonPayload" class="w-full p-2 border rounded h-40 font-mono"
+                placeholder='{"key": "value"}'></textarea>
+        </div>
 
-        <!-- 环境B -->
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h2 class="text-xl font-semibold mb-4 text-green-600">环境B</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">请求URL</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="urlB" class="flex-1 p-2 border rounded"
-                               placeholder="http://127.0.0.1:8080/api/requestB" onkeypress="urlBFillDefaultValue(event)">
-                    </div>
-                    <label class="block text-sm font-medium mb-1">请求头</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="headerB" class="flex-1 p-2 border rounded"
-                               placeholder='{"Content-Type": "application/json"}' onkeypress="headBFillDefaultValue(event)" list="urlHistory">
-                    </div>
-                </div>
-                <div id="payloadSectionB" class="hidden">
-                    <label class="block text-sm font-medium mb-1">专属请求报文</label>
-                    <textarea id="payloadB" class="w-full p-2 border rounded h-40 font-mono" maxlength="10000"
-                              placeholder='{"key": "value"}'></textarea>
-                </div>
+        <!-- 操作按钮 -->
+        <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
+            <button onclick="sendRequests()"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                执行对比测试
+            </button>
+            <button onclick="showOriginResult()" id="showOriginResultBtn"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                展示原始结果
+            </button>
+        </div>
+
+        <!-- 对比结果框 -->
+        <div id="diffResultContent" class="col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto">
+            <h3 class="text-lg font-semibold mb-4 text-center">对比结果</h3>
+        </div>
+
+        <!-- 原始返回展示框 -->
+        <div class="mt-8 grid grid-cols-2 gap-6 hidden" id="originalResponseShow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">请求A响应原始结果</h3>
+                <pre id="responseA" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">请求B响应原始结果</h3>
+                <pre id="responseB" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
             </div>
         </div>
-    </div>
-    <!-- 公共报文区域 -->
-    <div id="commonPayloadSection" class="col-span-2 bg-white p-6 rounded-xl shadow-sm">
-        <label class="block text-sm font-medium mb-1">公共请求报文</label>
-        <textarea id="commonPayload" class="w-full p-2 border rounded h-40 font-mono"
-                  placeholder='{"key": "value"}'></textarea>
-    </div>
 
-    <!-- 操作按钮 -->
-    <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
-        <button onclick="sendRequests()"
-                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-            执行对比测试
-        </button>
-        <button onclick="showOriginResult()" id="showOriginResultBtn"
-                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-            展示原始结果
-        </button>
-    </div>
-
-    <!-- 对比结果框 -->
-    <div id="diffResultContent" class="col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto">
-        <h3 class="text-lg font-semibold mb-4 text-center">对比结果</h3>
-    </div>
-
-    <!-- 原始返回展示框 -->
-    <div class="mt-8 grid grid-cols-2 gap-6 hidden" id="originalResponseShow">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">请求A响应原始结果</h3>
-            <pre id="responseA" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">请求B响应原始结果</h3>
-            <pre id="responseB" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
-        </div>
-    </div>
-
-    <!-- 数据库配置 -->
-    <div class="mt-8 grid grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">环境A数据库配置</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">JDBC URL</label>
-                    <input type="text" id="jdbcUrlA" class="w-full p-2 border rounded">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
+        <!-- 数据库配置 -->
+        <div class="mt-8 grid grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">环境A数据库配置</h3>
+                <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium mb-1">用户名</label>
-                        <input type="text" id="dbUserA" class="w-full p-2 border rounded">
+                        <label class="block text-sm font-medium mb-1">JDBC URL</label>
+                        <input type="text" id="jdbcUrlA" class="w-full p-2 border rounded">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">密码</label>
-                        <input type="password" id="dbPasswordA" class="w-full p-2 border rounded">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">用户名</label>
+                            <input type="text" id="dbUserA" class="w-full p-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">密码</label>
+                            <input type="password" id="dbPasswordA" class="w-full p-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">数据库类型</label>
+                            <form action="dbTypeA">
+                                <select name="dbTpyeSelectA">
+                                    <option value="ORACLE">ORACLE</option>
+                                    <option value="MYSQL">MYSQL</option>
+                                    <option value="GAUSSDB">GAUSSDB</option>
+                                    <option value="TDSQL">TDSQL</option>
+                                </select>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <button onclick="connectDatabase('A')"
+                    <button onclick="connectDatabase('A')"
                         class="w-full py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
-                    连接环境A数据库
-                </button>
+                        连接环境A数据库
+                    </button>
+                </div>
+                <div class="space-y-4 hidden" id="dbBtableSectionA">
+                    <label>选择表:</label>
+                    <input type="text" id="tablesNameA" list="tableNameListA" autocomplete="on">
+                    <!-- 下拉列表 -->
+                    <datalist id="tableNameListA">
+                    </datalist>
+                </div>
+                <div class="mt-2 grid grid-cols-2 gap-2" id="dbKeyConfigA">
+                    <div class="space-y-4" id="postKeySectionA">
+                        <label class="block text-sm font-medium mb-1">选择返回报文Key:</label>
+                        <input type="text" id="postKeyA" list="postKeyListA" placeholder="请输入返回报文中Key" autocomplete="on">
+                        <!-- 下拉列表 -->
+                        <datalist id="postKeyListA">
+                        </datalist>
+                    </div>
+                    <div class="space-y-4" id="tableKeySectionA">
+                        <label class="block text-sm font-medium mb-1">选择表内字段名称:</label>
+                        <input type="text" id="tableKeyA" list="tableKeyListA" placeholder="请输入表内字段名称" autocomplete="on">
+                        <!-- 下拉列表 -->
+                        <datalist id="tableKeyListA">
+                        </datalist>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">环境B数据库配置</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">JDBC URL</label>
+                        <input type="text" id="jdbcUrlB" class="w-full p-2 border rounded">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">用户名</label>
+                            <input type="text" id="dbUserB" class="w-full p-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">密码</label>
+                            <input type="password" id="dbPasswordB" class="w-full p-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">数据库类型</label>
+                            <form action="dbTypeB">
+                                <select name="dbTpyeSelectB">
+                                    <option value="ORACLE">ORACLE</option>
+                                    <option value="MYSQL">MYSQL</option>
+                                    <option value="GAUSSDB">GAUSSDB</option>
+                                    <option value="TDSQL">TDSQL</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                    <button onclick="connectDatabase('B')"
+                        class="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                        连接环境B数据库
+                    </button>
+                </div>
+                <div class="space-y-4 hidden" id="dbBtableSectionB">
+                    <label for="fruits">选择表:</label>
+                    <input type="text" id="tablesNameB" list="tableNameListB" autocomplete="on">
+                    <!-- 下拉列表 -->
+                    <datalist id="tableNameListB">
+                    </datalist>
+                </div>
+                <div class="mt-2 grid grid-cols-2 gap-2" id="dbKeyConfigB">
+                    <div class="space-y-4" id="postKeySectionB">
+                        <label class="block text-sm font-medium mb-1">选择返回报文Key:</label>
+                        <input type="text" id="postKeyB" list="postKeyListB" placeholder="请输入返回报文中Key" autocomplete="on">
+                        <!-- 下拉列表 -->
+                        <datalist id="postKeyListB">
+                        </datalist>
+                    </div>
+                    <div class="space-y-4" id="tableKeySectionB">
+                        <label class="block text-sm font-medium mb-1">选择表内字段名称:</label>
+                        <input type="text" id="tableKeyB" list="tableKeyListB" placeholder="请输入表内字段名称" autocomplete="on">
+                        <!-- 下拉列表 -->
+                        <datalist id="tableKeyListB">
+                        </datalist>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">环境B数据库配置</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">JDBC URL</label>
-                    <input type="text" id="jdbcUrlB" class="w-full p-2 border rounded">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">用户名</label>
-                        <input type="text" id="dbUserB" class="w-full p-2 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">密码</label>
-                        <input type="password" id="dbPasswordB" class="w-full p-2 border rounded">
-                    </div>
-                </div>
-                <button onclick="connectDatabase('B')"
-                        class="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                    连接环境B数据库
-                </button>
-            </div>
+        <!-- 操作按钮 -->
+        <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
+            <button onclick="showPostTableKeyConfigDiv()"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                配置报文-数据字段
+            </button>
+            <button onclick="showOriginResult()" id="showOriginResultBtn"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                数据对比
+            </button>
         </div>
     </div>
-</div>
 
-<script>
+    <script>
         let isSamePayload = true;
         let formattedResponses = { A: null, B: null };
         let differences = {};
@@ -234,14 +340,14 @@
             }
 
             try {
-                    payloadAJson = JSON.parse(payload.payloadA);
-                    payloadBJson = JSON.parse(payload.payloadB);
+                payloadAJson = JSON.parse(payload.payloadA);
+                payloadBJson = JSON.parse(payload.payloadB);
 
-                    payload.payloadA = JSON.stringify(payloadAJson);
-                    payload.payloadB = JSON.stringify(payloadBJson);
-                } catch (error) {
-                    window.alert('输入报文含有非法json字符串', error);
-                }
+                payload.payloadA = JSON.stringify(payloadAJson);
+                payload.payloadB = JSON.stringify(payloadBJson);
+            } catch (error) {
+                window.alert('输入报文含有非法json字符串', error);
+            }
 
             try {
                 const response = await fetch('/api/send-request', {
@@ -250,9 +356,9 @@
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json(); 
-                formattedResponses = { A: result.resultA, B: result.resultB};
-                differences = JsDiff.createTwoFilesPatch('resutl-A', 'result-B', reponseFormat(formattedResponses.A), reponseFormat(formattedResponses.B));
+                const result = await response.json();
+                formattedResponses = { A: result.resultA, B: result.resultB };
+                differences = JsDiff.createTwoFilesPatch('resutl-A', 'result-B', reponseSortedFormat(formattedResponses.A), reponseSortedFormat(formattedResponses.B));
                 displayResponses(differences);
             } catch (error) {
                 console.error('请求失败:', error);
@@ -277,43 +383,55 @@
                 outputFormat: "side-by-side",
                 stickyFileHeaders: false
             });
-
-            // const configuration = { drawFileList: true, matching: 'lines', highlight: true, outputFormat: "side-by-side", synchronisedScroll: true };
-            // const diff2htmlUi = new Diff2HtmlUI(diffResultContent, diff, configuration);
-            // diff2htmlUi.draw();
-            // diff2htmlUi.highlightCode();
         }
 
         function headAFillDefaultValue(event) {
             if (event.key === 'Enter') {
-            document.getElementById("headerA").value = '{"Content-Type": "application/json"}';
-            event.preventDefault(); // 防止表单提交
+                document.getElementById("headerA").value = '{"Content-Type": "application/json"}';
+                event.preventDefault(); // 防止表单提交
             }
         }
-        
+
         function headBFillDefaultValue(event) {
             if (event.key === 'Enter') {
-            document.getElementById("headerB").value = '{"Content-Type": "application/json"}';
-            event.preventDefault(); // 防止表单提交
+                document.getElementById("headerB").value = '{"Content-Type": "application/json"}';
+                event.preventDefault(); // 防止表单提交
             }
-        }  
+        }
 
         function urlAFillDefaultValue(event) {
             if (event.key === 'Enter') {
-            document.getElementById("urlA").value = 'http://127.0.0.1:8080/api/requestA';
-            event.preventDefault(); // 防止表单提交
+                document.getElementById("urlA").value = 'http://127.0.0.1:8080/api/requestA';
+                event.preventDefault(); // 防止表单提交
             }
         }
 
         function urlBFillDefaultValue(event) {
             if (event.key === 'Enter') {
-            document.getElementById("urlB").value = 'http://127.0.0.1:8080/api/requestB';
-            event.preventDefault(); // 防止表单提交
+                document.getElementById("urlB").value = 'http://127.0.0.1:8080/api/requestB';
+                event.preventDefault(); // 防止表单提交
             }
+        }
+
+        function reponseSortedFormat(json) {
+            let jsonObject = JSON.parse(json);
+            let sortedKeys = Object.keys(jsonObject).sort();
+            let sortedObj = {};
+            sortedKeys.forEach(key => {
+                sortedObj[key] = jsonObject[key];
+            });
+            let formattedJson = JSON.stringify(jsonObject, null, 4);
+            console.log(formattedJson);
+            return formattedJson;
         }
 
         function reponseFormat(json) {
             let jsonObject = JSON.parse(json);
+            let sortedKeys = Object.keys(jsonObject).sort();
+            let sortedObj = {};
+            sortedKeys.forEach(key => {
+                sortedObj[key] = jsonObject[key];
+            });
             let formattedJson = JSON.stringify(jsonObject, null, 4);
             console.log(formattedJson);
             return formattedJson;
@@ -351,8 +469,8 @@
                     return `<div class="diff-modified">${syntaxHighlight(line)}</div>`;
                 }
                 return `<div>${syntaxHighlight(line)}</div>`;
-        }).join('\n');
-    }
+            }).join('\n');
+        }
 
         function sortKeys(obj) {
             if (typeof obj !== 'object' || obj === null) return obj;
@@ -367,7 +485,8 @@
                 env: env,
                 url: document.getElementById(`jdbcUrl${env}`).value,
                 username: document.getElementById(`dbUser${env}`).value,
-                password: document.getElementById(`dbPassword${env}`).value
+                password: document.getElementById(`dbPassword${env}`).value,
+                dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value
             };
 
             const response = await fetch('/api/connect-db', {
@@ -377,8 +496,38 @@
             });
 
             const result = await response.json();
-            alert(result.status === 'success' ? `环境${env}数据库连接成功` : `连接失败: ${result.message}`);
+
+            if (result.status === 'success') {
+                let dbBEelement = document.getElementById(`dbBtableSection${env}`);
+                dbBEelement.classList.remove('hidden');
+                let tableNameList = document.getElementById(`tableNameList${env}`);
+                tableNameList.innerHTML = '';
+                result.tablesName.forEach(table => {
+                    let option = document.createElement('option');
+                    option.value = table;
+                    tableNameList.appendChild(option);
+                });
+            } else {
+                alert(`连接失败: ${result.message}`);
+            }
+        }
+
+        // 递归函数来获取所有key
+        function extractKeys(obj) {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    keysList.push(key); // 添加当前key到数组中
+                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        extractKeys(obj[key]); // 递归调用获取子对象的key
+                    }
+                }
+            }
+        }
+
+        function showPostTableKeyConfigDiv(env){
+
         }
     </script>
 </body>
+
 </html>
