@@ -18,19 +18,28 @@ public class MySQLDBTest {
         String tableName = "account";
         String columnKey = "ID";
         String columnValue = "1";
+        String dbType = "MYSQL";
 
         MySQLDBTest mySQLDBTest = new MySQLDBTest();
-        mySQLDBTest.mySQLTabelColumnsGet(url, user, password, tableName);
+        mySQLDBTest.mySQLTabelColumnsGet(url, user, password, tableName, dbType);
         mySQLDBTest.mySQLTableDataToJson(url,user,password,tableName, columnKey, columnValue);
     }
 
-    public List<String> mySQLTabelsGet(String url, String user, String password){
+    public List<String> mySQLTabelsGet(String url, String user, String password, String dbType){
         List<String> tablesName = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
-
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(CommonConsts.MYSQL_TABLE_QUERY_SQL);
+            String tableQuerySQL = null;
+            switch (dbType){
+                case "MYSQL":
+                    tableQuerySQL = CommonConsts.MYSQL_TABLE_QUERY_SQL;
+                    break;
+                case "ORALCE":
+                    tableQuerySQL = CommonConsts.ORACLE_TABLE_QUERY_SQL;
+                    break;
+            }
+            ResultSet resultSet = statement.executeQuery(tableQuerySQL);
 
             while (resultSet.next()) {
                 tablesName.add(resultSet.getString("TABLE_NAME"));
@@ -46,12 +55,19 @@ public class MySQLDBTest {
         return tablesName;
     }
 
-    public List<String> mySQLTabelColumnsGet(String url, String user, String password, String tableName){
+    public List<String> mySQLTabelColumnsGet(String url, String user, String password, String tableName, String dbType){
         List<String> tableColumn = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
-
-            String queryColumnSql = CommonConsts.MYSQL_TABLE_COLUMNS_QUERY_SQL_PRE;
+            String queryColumnSql = null;
+            switch (dbType){
+                case "MYSQL":
+                    queryColumnSql = CommonConsts.ORALCE_TABLE_COLUMNS_QUERY_SQL_PRE;
+                    break;
+                case "ORALCE":
+                    queryColumnSql = CommonConsts.MYSQL_TABLE_COLUMNS_QUERY_SQL_PRE;
+                    break;
+            }
             PreparedStatement pstmt = connection.prepareStatement(queryColumnSql);
             pstmt.setString(1, tableName);
             ResultSet resultSet = pstmt.executeQuery();
@@ -75,7 +91,7 @@ public class MySQLDBTest {
         String jsonResult = null;
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
-            String queryColumnSql = String.format(CommonConsts.MYSQL_TABLE_DATA_JSON_QUERY_SQL_PRE, tableName, columnKey);
+            String queryColumnSql = String.format(CommonConsts.TABLE_DATA_JSON_QUERY_SQL_PRE, tableName, columnKey);
             PreparedStatement pstmt = connection.prepareStatement(queryColumnSql);
             pstmt.setString(1, columnValue);
 

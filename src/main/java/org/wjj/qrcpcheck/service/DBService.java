@@ -13,12 +13,12 @@ public class DBService {
     @Autowired
     MySQLDBTest mySQLDBTest;
 
-    public List<String> getTableNames(String url, String user, String password){
-        return mySQLDBTest.mySQLTabelsGet(url, user, password);
+    public List<String> getTableNames(String url, String user, String password, String dbType){
+        return mySQLDBTest.mySQLTabelsGet(url, user, password, dbType);
     }
 
-    public List<String> getTableColumns(String url, String user, String password, String tableName){
-        return mySQLDBTest.mySQLTabelColumnsGet(url, user, password, tableName);
+    public List<String> getTableColumns(String url, String user, String password, String tableName, String dbType){
+        return mySQLDBTest.mySQLTabelColumnsGet(url, user, password, tableName, dbType);
     }
 
     public String getTableDataJSon(String url, String user, String password, String tableName,String columnKey, String columnValue){

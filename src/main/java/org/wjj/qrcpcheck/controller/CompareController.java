@@ -69,7 +69,7 @@ public class CompareController {
         String username = config.get("username");
         String password = config.get("password");
         String dbType = config.get("dbType");
-        List<String> tablesName = dbService.getTableNames(url, username, password);
+        List<String> tablesName = dbService.getTableNames(url, username, password, dbType);
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", "success");
@@ -84,7 +84,7 @@ public class CompareController {
         String password = config.get("password");
         String tableName = config.get("tableName");
         String dbType = config.get("dbType");
-        List<String> tableColumns = dbService.getTableColumns(url, username, password, tableName);
+        List<String> tableColumns = dbService.getTableColumns(url, username, password, tableName, dbType);
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", "success");
