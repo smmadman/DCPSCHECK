@@ -76,4 +76,36 @@ public class CompareController {
         result.put("tablesName", tablesName);
         return result;
     }
+
+    @PostMapping("/table-column-get")
+    public Map<String, Object> tableColumnGet(@RequestBody Map<String, String> config){
+        String url = config.get("url");
+        String username = config.get("username");
+        String password = config.get("password");
+        String tableName = config.get("tableName");
+        String dbType = config.get("dbType");
+        List<String> tableColumns = dbService.getTableColumns(url, username, password, tableName);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("tableColumns", tableColumns);
+        return result;
+    }
+
+    @PostMapping("/table-data-json-get")
+        public Map<String, Object> tableDataJsonGet(@RequestBody Map<String, String> config){
+        String url = config.get("url");
+        String username = config.get("username");
+        String password = config.get("password");
+        String tableName = config.get("tableName");
+        String columnKey = config.get("columnKey");
+        String columnValue = config.get("columnValue");
+        String dbType = config.get("dbType");
+
+        String tableDataJson = dbService.getTableDataJSon(url, username, password, tableName, columnKey, columnValue);
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("tableDataJson", tableDataJson);
+        return result;
+    }
 }

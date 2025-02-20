@@ -115,8 +115,8 @@
         <!-- 公共报文区域 -->
         <div id="commonPayloadSection" class="col-span-2 bg-white p-6 rounded-xl shadow-sm">
             <label class="block text-sm font-medium mb-1">公共请求报文</label>
-            <textarea id="commonPayload" class="w-full p-2 border rounded h-40 font-mono"
-                placeholder='{"key": "value"}'></textarea>
+            <textarea id="commonPayload" class="w-full p-2 border rounded h-40 font-mono" placeholder='{"key": "value"}'
+                onkeypress="commonPayloadFillDefaultValue(event)"></textarea>
         </div>
 
         <!-- 操作按钮 -->
@@ -150,21 +150,24 @@
 
         <!-- 数据库配置 -->
         <div class="mt-8 grid grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
                 <h3 class="text-lg font-semibold mb-4">环境A数据库配置</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">JDBC URL</label>
-                        <input type="text" id="jdbcUrlA" class="w-full p-2 border rounded">
+                        <input type="text" id="jdbcUrlA" class="w-full p-2 border rounded"
+                            onkeypress="jdbcURLFillDefaultValue(event)">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">用户名</label>
-                            <input type="text" id="dbUserA" class="w-full p-2 border rounded">
+                            <input type="text" id="dbUserA" class="w-full p-2 border rounded"
+                                onkeypress="userFillDefaultValue(event)">
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1">密码</label>
-                            <input type="password" id="dbPasswordA" class="w-full p-2 border rounded">
+                            <input type="password" id="dbPasswordA" class="w-full p-2 border rounded"
+                                onkeypress="passwordFillDefaultValue(event)">
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1">数据库类型</label>
@@ -184,23 +187,23 @@
                     </button>
                 </div>
                 <div class="space-y-4 hidden" id="dbBtableSectionA">
-                    <label>选择表:</label>
-                    <input type="text" id="tablesNameA" list="tableNameListA" autocomplete="on">
+                    <input type="text" id="tablesNameA" list="tableNameListA" autocomplete="on"
+                        class="w-full p-1 border rounded mb-1" placeholder="请输入或选择表">
                     <!-- 下拉列表 -->
                     <datalist id="tableNameListA">
                     </datalist>
                 </div>
-                <div class="mt-2 grid grid-cols-2 gap-2" id="dbKeyConfigA">
+                <div class="mt-2 grid grid-cols-2 gap-2 hidden" id="dbKeyConfigA">
                     <div class="space-y-4" id="postKeySectionA">
-                        <label class="block text-sm font-medium mb-1">选择返回报文Key:</label>
-                        <input type="text" id="postKeyA" list="postKeyListA" placeholder="请输入返回报文中Key" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1" id="postKeyA" list="postKeyListA"
+                            placeholder="请选择返回报文Key" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="postKeyListA">
                         </datalist>
                     </div>
                     <div class="space-y-4" id="tableKeySectionA">
-                        <label class="block text-sm font-medium mb-1">选择表内字段名称:</label>
-                        <input type="text" id="tableKeyA" list="tableKeyListA" placeholder="请输入表内字段名称" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1" id="tableKeyA" list="tableKeyListA"
+                            placeholder="请选择表内字段名" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="tableKeyListA">
                         </datalist>
@@ -208,7 +211,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
                 <h3 class="text-lg font-semibold mb-4">环境B数据库配置</h3>
                 <div class="space-y-4">
                     <div>
@@ -242,23 +245,23 @@
                     </button>
                 </div>
                 <div class="space-y-4 hidden" id="dbBtableSectionB">
-                    <label for="fruits">选择表:</label>
-                    <input type="text" id="tablesNameB" list="tableNameListB" autocomplete="on">
+                    <input type="text" id="tablesNameB" list="tableNameListB" autocomplete="on"
+                        class="w-full p-1 border rounded mb-1" placeholder="请输入或选择表">
                     <!-- 下拉列表 -->
                     <datalist id="tableNameListB">
                     </datalist>
                 </div>
-                <div class="mt-2 grid grid-cols-2 gap-2" id="dbKeyConfigB">
+                <div class="mt-2 grid grid-cols-2 gap-2 hidden" id="dbKeyConfigB">
                     <div class="space-y-4" id="postKeySectionB">
-                        <label class="block text-sm font-medium mb-1">选择返回报文Key:</label>
-                        <input type="text" id="postKeyB" list="postKeyListB" placeholder="请输入返回报文中Key" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1" id="postKeyB" list="postKeyListB"
+                            placeholder="请选择返回报文Key" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="postKeyListB">
                         </datalist>
                     </div>
                     <div class="space-y-4" id="tableKeySectionB">
-                        <label class="block text-sm font-medium mb-1">选择表内字段名称:</label>
-                        <input type="text" id="tableKeyB" list="tableKeyListB" placeholder="请输入表内字段名称" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1" id="tableKeyB" list="tableKeyListB"
+                            placeholder="请选择表内字段名" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="tableKeyListB">
                         </datalist>
@@ -269,22 +272,41 @@
 
         <!-- 操作按钮 -->
         <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
-            <button onclick="showPostTableKeyConfigDiv()"
+            <button onclick="showPostTableKeyConfigDiv()" id="showPostTableKeyConfigBtn"
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 配置报文-数据字段
             </button>
-            <button onclick="showOriginResult()" id="showOriginResultBtn"
+            <button onclick="showTableDiff()" id="showOriginResultBtn"
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 数据对比
             </button>
+        </div>
+
+        <!-- 表结果对比结果框 -->
+        <div id="diffTableResultContent" class="col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto hidden">
+            <h3 class="text-lg font-semibold mb-4 text-center">表数据对比结果（Json化）</h3>
+        </div>
+
+        <!-- 表结果原始返回展示框 -->
+        <div class="mt-8 grid grid-cols-2 gap-6 hidden" id="originalTableShow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">表A原始数据</h3>
+                <pre id="tableDataA" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">表B原始数据</h3>
+                <pre id="tableDataB" class="h-96 overflow-auto font-mono text-sm p-4 bg-gray-50 rounded"></pre>
+            </div>
         </div>
     </div>
 
     <script>
         let isSamePayload = true;
         let formattedResponses = { A: null, B: null };
+        let tableDataResponses = { A: null, B: null };
         let differences = {};
         let isShowOriginResult = false;
+        let isShowDbKeyConfig = false;
 
         // 展示原始结果
         function showOriginResult() {
@@ -486,9 +508,9 @@
                 url: document.getElementById(`jdbcUrl${env}`).value,
                 username: document.getElementById(`dbUser${env}`).value,
                 password: document.getElementById(`dbPassword${env}`).value,
-                dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value
+                dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value,
             };
-
+            const dbKeyConfigDiv = document.getElementById(`dbKeyConfig${env}`);
             const response = await fetch('/api/connect-db', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
@@ -509,23 +531,209 @@
                 });
             } else {
                 alert(`连接失败: ${result.message}`);
+                dbKeyConfigDiv.classList.add('hidden');
+                return;
             }
         }
 
-        // 递归函数来获取所有key
-        function extractKeys(obj) {
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    keysList.push(key); // 添加当前key到数组中
-                    if (typeof obj[key] === 'object' && obj[key] !== null) {
-                        extractKeys(obj[key]); // 递归调用获取子对象的key
-                    }
+        // 获取表内列名
+        async function getTableKeys(env) {
+            let tableName = document.getElementById(`tablesName${env}`).value;
+            let tableQueryConfig = {
+                env: env,
+                url: document.getElementById(`jdbcUrl${env}`).value,
+                username: document.getElementById(`dbUser${env}`).value,
+                password: document.getElementById(`dbPassword${env}`).value,
+                dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value,
+                tableName: tableName
+            };
+            const tableColumnResponse = await fetch('/api/table-column-get', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                body: JSON.stringify(tableQueryConfig)
+            });
+
+            const tableColumnResult = await tableColumnResponse.json();
+            if (tableColumnResult.status === 'success') {
+                let tableKeyList = document.getElementById(`tableKeyList${env}`);
+                tableKeyList.innerHTML = '';
+                tableColumnResult.tableColumns.forEach(key => {
+                    let option = document.createElement('option');
+                    option.value = key;
+                    tableKeyList.appendChild(option);
+                });
+            } else {
+                alert(`获取表内列名失败: ${tableColumnResult.message}，环境：${env}`);
+            }
+
+        }
+
+        function showPostTableKeyConfigDiv() {
+            isShowDbKeyConfig = !isShowDbKeyConfig;
+            document.getElementById('dbKeyConfigA').classList.toggle('hidden');
+            document.getElementById('dbKeyConfigB').classList.toggle('hidden');
+            if (isShowDbKeyConfig) {
+                document.getElementById('showPostTableKeyConfigBtn').innerHTML = '隐藏配置';
+            } else {
+                document.getElementById('showPostTableKeyConfigBtn').innerHTML = '配置报文-数据字段';
+            }
+
+            postKeyConfigByEnv('A');
+            postKeyConfigByEnv('B');
+            getTableKeys('A');
+            getTableKeys('B');
+        }
+
+        function postKeyConfigByEnv(env) {
+            let tableKeyList = document.getElementById(`tableKeyList${env}`);
+            tableKeyList.innerHTML = '';
+            let postKeyList = document.getElementById(`postKeyList${env}`);
+            postKeyList.innerHTML = '';
+
+            let keysListPost = getAllKeys(JSON.parse(formattedResponses[`${env}`]));
+
+            keysListPost.forEach(key => {
+                let option = document.createElement('option');
+                option.value = key;
+                postKeyList.appendChild(option);
+            });
+
+            keysListPost = []; // 清空数组
+        }
+
+        function getAllKeys(obj, parentKey = '') {
+            let keys = [];
+
+            for (const key in obj) {
+                // 构造新键
+                const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    // 如果当前值是对象，递归处理
+                    keys = keys.concat(getAllKeys(obj[key], newKey));
+                } else {
+                    // 将当前键添加到结果中
+                    keys.push(newKey);
                 }
             }
+            return keys;
         }
 
-        function showPostTableKeyConfigDiv(env){
+        // 遍历对象并获取值
+        function getValueByKey(obj, keyPath) {
+            // 将键路径拆分为数组
+            const keys = keyPath.split('.');
 
+            // 遍历路径获取最终值
+            let current = obj;
+
+            for (let key of keys) {
+                if (current.hasOwnProperty(key)) {
+                    current = current[key];
+                } else {
+                    return undefined; // 如果路径不存在返回 undefined
+                }
+            }
+
+            return current; // 返回最终的值
+        }
+
+        function jdbcURLFillDefaultValue(event) {
+            if (event.key === 'Enter') {
+                document.getElementById("jdbcUrlA").value = 'jdbc:mysql://localhost:3306/test';
+                document.getElementById("jdbcUrlB").value = 'jdbc:mysql://localhost:3306/test';
+                event.preventDefault(); // 防止表单提交
+            }
+        }
+
+        function userFillDefaultValue(event) {
+            if (event.key === 'Enter') {
+                document.getElementById("dbUserA").value = 'root';
+                document.getElementById("dbUserB").value = 'root';
+                event.preventDefault(); // 防止表单提交
+            }
+        }
+
+        function passwordFillDefaultValue(event) {
+            if (event.key === 'Enter') {
+                document.getElementById("dbPasswordA").value = 'y32163214';
+                document.getElementById("dbPasswordB").value = 'y32163214';
+                event.preventDefault(); // 防止表单提交
+            }
+        }
+
+        function commonPayloadFillDefaultValue(event) {
+            if (event.key === 'Enter') {
+                document.getElementById("commonPayload").value = '{"commonKey": "commonValue"}';
+                event.preventDefault(); // 防止表单提交
+            }
+        }
+
+        function showTableDiff() {
+            let tableDiffElement = document.getElementById('diffTableResultContent');
+            tableDiffElement.classList.remove('hidden');
+            let tableOriginCommonElement = document.getElementById('originalTableShow');
+            tableOriginCommonElement.classList.remove('hidden');
+
+            Promise.all([getSingleTableData('A'), getSingleTableData('B')]).then(() => {
+                tableDifferences = JsDiff.createTwoFilesPatch('table-A', 'table-B', reponseSortedFormat(tableDataResponses.A), reponseSortedFormat(tableDataResponses.B));
+                displayTableDataResult(tableDifferences);
+            });
+        }
+
+        async function getSingleTableData(env) {
+            let tableName = document.getElementById(`tablesName${env}`).value;
+            let columnKey = document.getElementById(`tableKey${env}`).value;
+            let columnTempValue = document.getElementById(`postKey${env}`).value;
+            let columnValue = getValueByKey(JSON.parse(formattedResponses[`${env}`]), columnTempValue);
+
+            console.log(tableName, columnKey, columnTempValue, columnValue);
+
+            let tableDataQueryConfig = {
+                env: env,
+                url: document.getElementById(`jdbcUrl${env}`).value,
+                username: document.getElementById(`dbUser${env}`).value,
+                password: document.getElementById(`dbPassword${env}`).value,
+                dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value,
+                tableName: tableName,
+                columnKey: columnKey,
+                columnValue: columnValue
+            };
+
+            try {
+                const response = await fetch('/api/table-data-json-get', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                    body: JSON.stringify(tableDataQueryConfig)
+                });
+
+                const tableResult = await response.json();
+                tableDataResponses[`${env}`] = tableResult.tableDataJson;
+                console.log(tableDataResponses);
+
+            } catch (error) {
+                console.error('请求失败:', error);
+            }
+        }
+
+        function displayTableDataResult(diff) {
+            const responseA = document.getElementById('tableDataA');
+            const responseB = document.getElementById('tableDataB');
+            const diffResultContent = document.getElementById('diffTableResultContent');
+
+            responseA.innerHTML = reponseFormat(tableDataResponses.A);
+            responseB.innerHTML = reponseFormat(tableDataResponses.B);
+
+            diffResultContent.innerHTML = Diff2Html.html(diff, {
+                inputFormat: "diff",
+                showFiles: false,
+                drawFileList: false,
+                diffStyle: "char",
+                matching: "lines",
+                highlight: true,
+                outputFormat: "side-by-side",
+                stickyFileHeaders: false
+            });
         }
     </script>
 </body>
