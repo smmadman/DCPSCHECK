@@ -569,14 +569,9 @@
         }
 
         function showPostTableKeyConfigDiv() {
-            isShowDbKeyConfig = !isShowDbKeyConfig;
-            document.getElementById('dbKeyConfigA').classList.toggle('hidden');
-            document.getElementById('dbKeyConfigB').classList.toggle('hidden');
-            if (isShowDbKeyConfig) {
-                document.getElementById('showPostTableKeyConfigBtn').innerHTML = '隐藏配置';
-            } else {
-                document.getElementById('showPostTableKeyConfigBtn').innerHTML = '配置报文-数据字段';
-            }
+            document.getElementById('dbKeyConfigA').classList.remove('hidden');
+            document.getElementById('dbKeyConfigB').classList.remove('hidden');
+            document.getElementById('showPostTableKeyConfigBtn').innerHTML = '重新获取列名数据';
 
             postKeyConfigByEnv('A');
             postKeyConfigByEnv('B');

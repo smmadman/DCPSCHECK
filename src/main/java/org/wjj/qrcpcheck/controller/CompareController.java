@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.ls.LSException;
+import org.wjj.qrcpcheck.common.dao.AccountLogic;
 import org.wjj.qrcpcheck.service.CompareService;
 import org.wjj.qrcpcheck.service.DBService;
 
@@ -23,6 +24,8 @@ public class CompareController {
     private CompareService compareService;
     @Autowired
     private DBService dbService;
+    @Autowired
+    private AccountLogic accountLogic;
 
     @PostMapping("/send-request")
     public Map<String, Object> sendRequest(@RequestBody Map<String, Object> request) {
@@ -107,5 +110,10 @@ public class CompareController {
         result.put("status", "success");
         result.put("tableDataJson", tableDataJson);
         return result;
+    }
+
+    @GetMapping("/test")
+        public void test(){
+        System.out.println(accountLogic.getById("1"));
     }
 }

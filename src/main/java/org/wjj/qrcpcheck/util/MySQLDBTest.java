@@ -1,7 +1,9 @@
 package org.wjj.qrcpcheck.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wjj.qrcpcheck.common.CommonConsts;
+import org.wjj.qrcpcheck.common.dao.AccountLogic;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Map;
 @Component
 public class MySQLDBTest {
     public static void main(String[] args) {
+
         String url = "jdbc:mysql://localhost:3306/test";
         String user = "root";
         String password = "y32163214";
@@ -62,10 +65,10 @@ public class MySQLDBTest {
             String queryColumnSql = null;
             switch (dbType){
                 case "MYSQL":
-                    queryColumnSql = CommonConsts.ORALCE_TABLE_COLUMNS_QUERY_SQL_PRE;
+                    queryColumnSql = CommonConsts.MYSQL_TABLE_COLUMNS_QUERY_SQL_PRE;
                     break;
                 case "ORALCE":
-                    queryColumnSql = CommonConsts.MYSQL_TABLE_COLUMNS_QUERY_SQL_PRE;
+                    queryColumnSql = CommonConsts.ORACLE_TABLE_COLUMNS_QUERY_SQL_PRE;
                     break;
             }
             PreparedStatement pstmt = connection.prepareStatement(queryColumnSql);
