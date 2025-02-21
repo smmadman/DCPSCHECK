@@ -1,9 +1,7 @@
 package org.wjj.qrcpcheck.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wjj.qrcpcheck.common.CommonConsts;
-import org.wjj.qrcpcheck.common.dao.AccountLogic;
 
 import java.sql.*;
 import java.util.ArrayList;

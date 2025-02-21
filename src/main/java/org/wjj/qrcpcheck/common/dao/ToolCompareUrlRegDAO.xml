@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegDAO">
+
+    <resultMap id="ToolCompareUrlRegEntity" type="org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegEntity">
+        <id column="ID_URL_HEADER" property="idUrlHeader" jdbcType="VARCHAR"/>
+        <result column="ALIASES_URL" property="aliasesUrl" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="HEADER" property="header" jdbcType="VARCHAR"/>
+        <result column="REG_TIME" property="regTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID_URL_HEADER, ALIASES_URL, URL, HEADER, REG_TIME
+    </sql>
+
+    <insert id="insert" parameterType="org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegEntity">
+        INSERT INTO TOOL_COMPARE_URL_REG (
+            ID_URL_HEADER,
+            ALIASES_URL,
+            URL,
+            HEADER,
+            REG_TIME
+        )
+        VALUES (
+            #{toolCompareUrlRegEntity.idUrlHeader,jdbcType=VARCHAR},
+            #{toolCompareUrlRegEntity.aliasesUrl,jdbcType=VARCHAR},
+            #{toolCompareUrlRegEntity.url,jdbcType=VARCHAR},
+            #{toolCompareUrlRegEntity.header,jdbcType=VARCHAR},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <select id="selectByIdUrlHeader" parameterType="java.lang.String" resultMap="ToolCompareUrlRegEntity">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_URL_REG
+        WHERE ID_URL_HEADER = #{idUrlHeader,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByAliasesUrl" parameterType="java.lang.String" resultMap="ToolCompareUrlRegEntity">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_URL_REG
+        WHERE ALIASES_URL = #{aliasesUrl,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAll" resultMap="ToolCompareUrlRegEntity">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_URL_REG
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegEntity">
+        UPDATE TOOL_COMPARE_URL_REG
+        SET
+            ALIASES_URL = #{aliasesUrl,jdbcType=VARCHAR},
+            URL = #{url,jdbcType=VARCHAR},
+            HEADER = #{header,jdbcType=VARCHAR}
+        WHERE ID_URL_HEADER = #{idUrlHeader,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM TOOL_COMPARE_URL_REG
+        WHERE ID_URL_HEADER = #{idUrlHeader,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

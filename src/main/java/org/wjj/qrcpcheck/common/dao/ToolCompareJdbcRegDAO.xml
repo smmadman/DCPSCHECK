@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegDAO">
+
+    <resultMap id="ToolCompareJdbcRegEntity" type="org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegEntity">
+        <id column="ID_URL_USER" property="idUrlUser" jdbcType="VARCHAR"/>
+        <result column="ALIASES_JDBC" property="aliasesJdbc" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="JDBC_USER" property="jdbcUser" jdbcType="VARCHAR"/>
+        <result column="JDBC_PASSWORD" property="jdbcPassword" jdbcType="VARCHAR"/>
+        <result column="JDBC_TYPE" property="jdbcType" jdbcType="VARCHAR"/>
+        <result column="REG_TIME" property="regTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID_URL_USER, ALIASES_JDBC, URL, JDBC_USER, JDBC_PASSWORD, JDBC_TYPE, REG_TIME
+    </sql>
+
+    <!-- 查询所有记录 -->
+    <select id="selectAll" resultMap="ToolCompareJdbcRegEntity">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_JDBC_REG
+    </select>
+
+    <!-- 根据 ID_URL_USER 查询记录 -->
+    <select id="selectByIdUrlUser" parameterType="java.lang.String" resultMap="ToolCompareJdbcRegEntity">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_JDBC_REG
+        WHERE ID_URL_USER = #{idUrlUser}
+    </select>
+
+    <!-- 根据 ALIASES_JDBC 查询记录 -->
+    <select id="selectByAliasesJdbc" parameterType="java.lang.String" resultMap="ToolCompareJdbcRegEntity">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM TOOL_COMPARE_JDBC_REG
+        WHERE ALIASES_JDBC = #{aliasesJdbc}
+    </select>
+
+    <!-- 插入记录 -->
+    <insert id="insert" parameterType="org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegEntity">
+        INSERT INTO TOOL_COMPARE_JDBC_REG (
+        ID_URL_USER,
+        ALIASES_JDBC,
+        URL, JDBC_USER,
+        JDBC_PASSWORD,
+        JDBC_TYPE,
+        REG_TIME
+        )
+        VALUES (
+        #{toolCompareJdbcRegEntity.idUrlUser},
+        #{toolCompareJdbcRegEntity.aliasesJdbc},
+        #{toolCompareJdbcRegEntity.url},
+        #{toolCompareJdbcRegEntity.jdbcUser},
+        #{toolCompareJdbcRegEntity.jdbcPassword},
+        #{toolCompareJdbcRegEntity.jdbcType},
+        CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <!-- 更新记录 -->
+    <update id="update" parameterType="org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegEntity">
+        UPDATE TOOL_COMPARE_JDBC_REG
+        SET
+        ALIASES_JDBC = #{toolCompareJdbcRegEntity.aliasesJdbc},
+        URL = #{toolCompareJdbcRegEntity.url},
+        JDBC_USER = #{toolCompareJdbcRegEntity.jdbcUser},
+        JDBC_PASSWORD = #{toolCompareJdbcRegEntity.jdbcPassword},
+        JDBC_TYPE = #{toolCompareJdbcRegEntity.jdbcType},
+        REG_TIME = CURRENT_TIMESTAMP
+        WHERE ID_URL_USER = #{toolCompareJdbcRegEntity.idUrlUser}
+    </update>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM TOOL_COMPARE_JDBC_REG
+        WHERE ID_URL_USER = #{idUrlUser}
+    </delete>
+
+</mapper>

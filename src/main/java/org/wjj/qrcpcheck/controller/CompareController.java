@@ -1,17 +1,16 @@
 package org.wjj.qrcpcheck.controller;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.ls.LSException;
-import org.wjj.qrcpcheck.common.dao.AccountLogic;
+import org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegEntity;
+import org.wjj.qrcpcheck.common.dao.ToolCompareJdbcRegLogic;
+import org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegEntity;
+import org.wjj.qrcpcheck.common.dao.ToolCompareUrlRegLogic;
 import org.wjj.qrcpcheck.service.CompareService;
 import org.wjj.qrcpcheck.service.DBService;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,9 @@ public class CompareController {
     @Autowired
     private DBService dbService;
     @Autowired
-    private AccountLogic accountLogic;
+    private ToolCompareJdbcRegLogic toolCompareJdbcRegLogic;
+    @Autowired
+    private ToolCompareUrlRegLogic toolCompareUrlRegLogic;
 
     @PostMapping("/send-request")
     public Map<String, Object> sendRequest(@RequestBody Map<String, Object> request) {
@@ -114,6 +115,28 @@ public class CompareController {
 
     @GetMapping("/test")
         public void test(){
-        System.out.println(accountLogic.getById("1"));
+//        ToolCompareUrlRegEntity toolCompareUrlRegEntity = new ToolCompareUrlRegEntity();
+//        toolCompareUrlRegEntity.setIdUrlHeader("http://127.0.0.1:8080/api/requestA|{\"Content-Type\": \"application/json\"}");
+//        toolCompareUrlRegEntity.setAliasesUrl("本地测试");
+//        toolCompareUrlRegEntity.setUrl("http://127.0.0.1:8080/api/requestA");
+//        toolCompareUrlRegEntity.setHeader("{\"Content-Type\": \"application/json\"}");
+//
+//        toolCompareUrlRegLogic.insert(toolCompareUrlRegEntity);
+
+//        ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = new ToolCompareJdbcRegEntity();
+//        toolCompareJdbcRegEntity.setIdUrlUser("jdbc:mysql://localhost:3306/test|root");
+//        toolCompareJdbcRegEntity.setAliasesJdbc("本地测试Jdbc");
+//        toolCompareJdbcRegEntity.setUrl("jdbc:mysql://localhost:3306/test");
+//        toolCompareJdbcRegEntity.setJdbcUser("root");
+//        toolCompareJdbcRegEntity.setJdbcPassword("y32163214");
+//        toolCompareJdbcRegEntity.setJdbcType("MYSQL");
+//
+//        toolCompareJdbcRegLogic.insert(toolCompareJdbcRegEntity);
+
+        System.out.println(toolCompareJdbcRegLogic.selectByIdUrlUser("jdbc:mysql://localhost:3306/test|root"));
+        System.out.println(toolCompareJdbcRegLogic.selectByAliasesJdbc("本地测试Jdbc"));
+        System.out.println(toolCompareUrlRegLogic.selectByIdUrlHeader("http://127.0.0.1:8080/api/requestA|{\"Content-Type\": \"application/json\"}"));
+        System.out.println(toolCompareUrlRegLogic.selectByAliasesUrl("本地测试"));
+        System.out.println();
     }
 }
