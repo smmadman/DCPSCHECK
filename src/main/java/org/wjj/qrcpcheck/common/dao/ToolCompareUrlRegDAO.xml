@@ -47,6 +47,11 @@
         WHERE ALIASES_URL = #{aliasesUrl,jdbcType=VARCHAR}
     </select>
 
+    <!-- 查询所有别名 -->
+    <select id="selectAllAliasesUrl" resultType="java.lang.String">
+        SELECT ALIASES_URL FROM TOOL_COMPARE_URL_REG
+    </select>
+
     <select id="selectAll" resultMap="ToolCompareUrlRegEntity">
         SELECT 
         <include refid="Base_Column_List" />

@@ -97,7 +97,7 @@ public class CompareController {
     }
 
     @PostMapping("/table-data-json-get")
-        public Map<String, Object> tableDataJsonGet(@RequestBody Map<String, String> config){
+    public Map<String, Object> tableDataJsonGet(@RequestBody Map<String, String> config){
         String url = config.get("url");
         String username = config.get("username");
         String password = config.get("password");
@@ -110,6 +110,42 @@ public class CompareController {
         Map<String, Object> result = new HashMap<>();
         result.put("status", "success");
         result.put("tableDataJson", tableDataJson);
+        return result;
+    }
+
+    @GetMapping("/url-aliases-get")
+    public Map<String, Object> urlAliasesGet(){
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("urlAliasesList", toolCompareUrlRegLogic.selectAllAliasesUrl());
+        return result;
+    }
+
+    @GetMapping("/jdbc-aliases-get")
+    public Map<String, Object> jdbcAliasesGet(){
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("jdbcAliasesList", toolCompareJdbcRegLogic.selectAllAliasesJdbc());
+        return result;
+    }
+
+    @PostMapping("/url-get-configuration")
+    public Map<String, Object> getUrlConfigurationByAliases(@RequestBody Map<String, String> config){
+        String urlAliases = config.get("urlAliases");
+        ToolCompareUrlRegEntity toolCompareUrlRegEntity = toolCompareUrlRegLogic.selectByAliasesUrl(urlAliases);
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("toolCompareUrlRegEntity", toolCompareUrlRegEntity);
+        return result;
+    }
+
+    @PostMapping("/jdbc-get-configuration")
+    public Map<String, Object> getJdbcConfigurationByAliases(@RequestBody Map<String, String> config){
+        String urlAliases = config.get("urlAliases");
+        ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = toolCompareJdbcRegLogic.selectByAliasesJdbc(urlAliases);
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("toolCompareJdbcRegEntity", toolCompareJdbcRegEntity);
         return result;
     }
 
@@ -133,10 +169,13 @@ public class CompareController {
 //
 //        toolCompareJdbcRegLogic.insert(toolCompareJdbcRegEntity);
 
-        System.out.println(toolCompareJdbcRegLogic.selectByIdUrlUser("jdbc:mysql://localhost:3306/test|root"));
-        System.out.println(toolCompareJdbcRegLogic.selectByAliasesJdbc("本地测试Jdbc"));
-        System.out.println(toolCompareUrlRegLogic.selectByIdUrlHeader("http://127.0.0.1:8080/api/requestA|{\"Content-Type\": \"application/json\"}"));
-        System.out.println(toolCompareUrlRegLogic.selectByAliasesUrl("本地测试"));
-        System.out.println();
+//        System.out.println(toolCompareJdbcRegLogic.selectByIdUrlUser("jdbc:mysql://localhost:3306/test|root"));
+//        System.out.println(toolCompareJdbcRegLogic.selectByAliasesJdbc("本地测试Jdbc"));
+//        System.out.println(toolCompareUrlRegLogic.selectByIdUrlHeader("http://127.0.0.1:8080/api/requestA|{\"Content-Type\": \"application/json\"}"));
+//        System.out.println(toolCompareUrlRegLogic.selectByAliasesUrl("本地测试"));
+//        System.out.println();
+
+        System.out.println(toolCompareUrlRegLogic.selectAllAliasesUrl());
+        System.out.println(toolCompareJdbcRegLogic.selectAllAliasesJdbc());
     }
 }

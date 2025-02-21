@@ -3,6 +3,8 @@ package org.wjj.qrcpcheck.common.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ToolCompareJdbcRegLogic {
     @Autowired
@@ -18,5 +20,9 @@ public class ToolCompareJdbcRegLogic {
 
     public ToolCompareJdbcRegEntity selectByAliasesJdbc(String aliasesJdbc){
         return toolCompareJdbcRegDAO.selectByAliasesJdbc(aliasesJdbc);
+    }
+
+    public List<String> selectAllAliasesJdbc(){
+        return toolCompareJdbcRegDAO.selectAllAliasesJdbc();
     }
 }

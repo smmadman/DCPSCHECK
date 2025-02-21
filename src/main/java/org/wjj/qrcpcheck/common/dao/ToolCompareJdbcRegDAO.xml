@@ -33,6 +33,11 @@
         WHERE ID_URL_USER = #{idUrlUser}
     </select>
 
+    <!-- 查询所有别名 -->
+    <select id="selectAllAliasesJdbc" resultType="java.lang.String">
+        SELECT ALIASES_JDBC FROM TOOL_COMPARE_JDBC_REG
+    </select>
+
     <!-- 根据 ALIASES_JDBC 查询记录 -->
     <select id="selectByAliasesJdbc" parameterType="java.lang.String" resultMap="ToolCompareJdbcRegEntity">
         SELECT
