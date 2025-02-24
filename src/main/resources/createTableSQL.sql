@@ -15,3 +15,6 @@ CREATE TABLE TOOL_COMPARE_JDBC_REG (
     JDBC_TYPE VARCHAR(100) NOT null,
     REG_TIME DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+insert into `tool_compare_jdbc_reg` (`ID_URL_USER`, `ALIASES_JDBC`, `URL`, `JDBC_USER`, `JDBC_PASSWORD`, `JDBC_TYPE`, `REG_TIME`) values('jdbc:mysql://localhost:3306/test|root','本地测试Jdbc','jdbc:mysql://localhost:3306/test','root','y32163214','MYSQL','2025-02-21 15:38:41');
+insert into `tool_compare_url_reg` (`ID_URL_HEADER`, `ALIASES_URL`, `URL`, `HEADER`, `REG_TIME`) values('http://127.0.0.1:8080/api/requestA|{\"Content-Type\": \"application/json\"}','本地测试','http://127.0.0.1:8080/api/requestA','{\"Content-Type\": \"application/json\"}','2025-02-21 14:46:43');
