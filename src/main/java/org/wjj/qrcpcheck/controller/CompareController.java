@@ -161,7 +161,7 @@ public class CompareController {
             return result;
         }
 
-        ToolCompareJdbcRegEntity getByJdbcAliases = toolCompareJdbcRegLogic.selectByAliasesJdbc(config.get("jdbcAliases"));
+        ToolCompareJdbcRegEntity getByJdbcAliases = toolCompareJdbcRegLogic.selectByAliasesJdbc(config.get("aliasesJdbc"));
         if(getByJdbcAliases != null){
             result.put("status", "fail");
             result.put("failInfo", "本别名已存在,配置信息为：" + getByJdbcAliases.getIdUrlUser());
@@ -171,11 +171,11 @@ public class CompareController {
         ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = new ToolCompareJdbcRegEntity();
 
         toolCompareJdbcRegEntity.setIdUrlUser(config.get("idUrlUser"));
-        toolCompareJdbcRegEntity.setAliasesJdbc(config.get("jdbcAliases"));
+        toolCompareJdbcRegEntity.setAliasesJdbc(config.get("aliasesJdbc"));
         toolCompareJdbcRegEntity.setUrl(config.get("url"));
-        toolCompareJdbcRegEntity.setJdbcUser(config.get("username"));
-        toolCompareJdbcRegEntity.setJdbcPassword(config.get("password"));
-        toolCompareJdbcRegEntity.setJdbcType(config.get("dbType"));
+        toolCompareJdbcRegEntity.setJdbcUser(config.get("jdbcUser"));
+        toolCompareJdbcRegEntity.setJdbcPassword(config.get("jdbcPassword"));
+        toolCompareJdbcRegEntity.setJdbcType(config.get("jdbcType"));
 
         toolCompareJdbcRegLogic.insert(toolCompareJdbcRegEntity);
         result.put("status", "success");

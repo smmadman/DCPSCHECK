@@ -25,9 +25,9 @@ const urlSaveModalUrlInput = document.getElementById('saveUrl');
 const urlSaveModalHeaderInput = document.getElementById('saveHeader');
 
 const jdbcSaveModalJdbcUrlInput = document.getElementById('saveJdbcUrl');
-const jdbcSaveModalJdbcUserInput = document.getElementById('saveJdbcUser');
-const jdbcSaveModalJdbcPasswordInput = document.getElementById('saveJdbcPassword');
-const jdbcSaveModalJdbcTypeInput = document.getElementById('saveJdbcType');
+const jdbcSaveModalJdbcUserInput = document.getElementById('saveDbUser');
+const jdbcSaveModalJdbcPasswordInput = document.getElementById('saveDbPassword');
+const jdbcSaveModalJdbcTypeInput = document.getElementById('saveDbType');
 
 
 //周一回来搞
@@ -612,14 +612,15 @@ function fillJDBCBConfiguration() {
 
 async function saveUrlConfig() {
     let urlSaveConfig = {
-        url : urlSaveModalUrlInput.value,
-        header : urlSaveModalHeaderInput.value,
-        aliasesUrl: document.getElementById(`saveAliasesUrl`).value,
-        idUrlHeader: urlSaveModalUrlInput.value + "|" + urlSaveModalHeaderInput.value
+        url : urlSaveModalUrlInput.value.trim(),
+        header : urlSaveModalHeaderInput.value.trim(),
+        aliasesUrl: document.getElementById(`saveAliasesUrl`).value.trim(),
+        idUrlHeader: (urlSaveModalUrlInput.value + "|" + urlSaveModalHeaderInput.value).trim()
     };
 
-    if(urlSaveModalUrlInput.value === "" || urlSaveModalHeaderInput.value === "" || document.getElementById(`saveAliasesUrl`).value === "") {
+    if(urlSaveModalUrlInput.value.trim() === "" || urlSaveModalHeaderInput.valuetrim() === "" || document.getElementById(`saveAliasesUrl`).value,trim() === "") {
         alert("请填写完整URL配置信息,别名不允许为空!")
+        return;
     }
 
     const urlSaveResponse = await fetch('/api/url-save-configuration', {
@@ -628,41 +629,37 @@ async function saveUrlConfig() {
         body: JSON.stringify(urlSaveConfig)
     });
 
-    if (urlSaveResponse.status === 'success') {
+    const result = await urlSaveResponse.json();
+
+    if (result.status === 'success') {
         urlSaveModal.style.display = "none";
         alert("URL配置保存成功!");
     } else {
-        alert('URL配置保存失败:' + urlSaveResponse.failInfo);
+        alert('URL配置保存失败:' + result.failInfo);
     }
 }
 
 async function saveJdbcConfig() {
-
-    let urlSaveConfig = {
-        env: env,
-        url: document.getElementById(`jdbcUrl${env}`).value,
-        username: document.getElementById(`dbUser${env}`).value,
-        password: document.getElementById(`dbPassword${env}`).value,
-        dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value,
-        urlAlias: document.getElementById(`configuredURL${env}`).value,
+    let jdbcSaveConfig = {
+        aliasesJdbc: document.getElementById(`saveAliasesJdbc`).value.trim(),
+        url: jdbcSaveModalJdbcUrlInput.value.trim(),
+        jdbcUser: jdbcSaveModalJdbcUserInput.value.trim(),
+        jdbcPassword: jdbcSaveModalJdbcPasswordInput.value.trim(),
+        jdbcType: jdbcSaveModalJdbcTypeInput.value.trim(),
+        idUrlUser: (jdbcSaveModalJdbcUrlInput.value + "|" + jdbcSaveModalJdbcUserInput.value + "|" + jdbcSaveModalJdbcTypeInput.value).trim()
     };
 
-    const uralSaveResponse = await fetch('/api/url-save-configuration', {
+    const jdbcSaveResponse = await fetch('/api/jdbc-save-configuration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        body: JSON.stringify(urlSaveConfig)
+        body: JSON.stringify(jdbcSaveConfig)
     });
 
-    const tableColumnResult = await tableColumnResponse.json();
-    if (tableColumnResult.status === 'success') {
-        let tableKeyList = document.getElementById(`tableKeyList${env}`);
-        tableKeyList.innerHTML = '';
-        tableColumnResult.tableColumns.forEach(key => {
-            let option = document.createElement('option');
-            option.value = key;
-            tableKeyList.appendChild(option);
-        });
+    const result = await jdbcSaveResponse.json();
+    if (result.status === 'success') {
+        jdbcSaveModal.style.display = "none";
+        alert("JDBC配置保存成功!");
     } else {
-        alert(`获取表内列名失败: ${tableColumnResult.message}，环境：${env}`);
+        alert('JDBC配置保存失败:' + result.failInfo);
     }
 }
