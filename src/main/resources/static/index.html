@@ -57,8 +57,8 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
+            /* background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0); */
             /* 黑色背景透明 */
         }
 
@@ -68,7 +68,7 @@
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 80%; /* 确保模态框宽度 */
             /* 宽度 */
         }
 
@@ -109,13 +109,14 @@
                         <h2 class="text-xl font-semibold mb-4 text-red-600">环境A</h2>
                     </div>
                     <div class="flex justify-end">
-                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的URL" id="configuredURLA" list="configuredURLListA" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的URL"
+                            id="configuredURLA" list="configuredURLListA" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="configuredURLListA">
                         </datalist>
                     </div>
                 </div>
-                
+
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">请求URL</label>
@@ -146,7 +147,8 @@
                         <h2 class="text-xl font-semibold mb-4 text-green-600">环境B</h2>
                     </div>
                     <div class="flex justify-end">
-                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的URL" id="configuredURLB" list="configuredURLListB" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的URL"
+                            id="configuredURLB" list="configuredURLListB" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="configuredURLListB">
                         </datalist>
@@ -184,6 +186,10 @@
 
         <!-- 操作按钮 -->
         <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
+            <button onclick="saveUrlAConfiguration()" id="saveUrlAConfigurationBtn"
+                class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                保存环境A配置
+            </button>
             <button onclick="sendRequests()"
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 执行对比测试
@@ -191,6 +197,10 @@
             <button onclick="showOriginResult()" id="showOriginResultBtn"
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 展示原始结果
+            </button>
+            <button onclick="saveUrlBConfiguration()" id="saveUrlBConfigurationBtn"
+                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                保存环境B配置
             </button>
         </div>
 
@@ -219,7 +229,8 @@
                         <h3 class="text-xl font-semibold mb-4 text-red-600">环境A数据库配置</h3>
                     </div>
                     <div class="flex justify-end">
-                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的JDBC" id="configuredJDBCA" list="configuredJDBCListA" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的JDBC"
+                            id="configuredJDBCA" list="configuredJDBCListA" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="configuredJDBCListA">
                         </datalist>
@@ -290,7 +301,8 @@
                         <h3 class="text-xl font-semibold mb-4 text-green-600">环境B数据库配置</h3>
                     </div>
                     <div class="flex justify-end">
-                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的JDBC" id="configuredJDBCB" list="configuredJDBCListB" autocomplete="on">
+                        <input type="text" class="w-full p-1 border rounded mb-1 " placeholder="选择已配置的JDBC"
+                            id="configuredJDBCB" list="configuredJDBCListB" autocomplete="on">
                         <!-- 下拉列表 -->
                         <datalist id="configuredJDBCListB">
                         </datalist>
@@ -355,6 +367,10 @@
 
         <!-- 操作按钮 -->
         <div class="mt-6 flex justify-center mb-4 grid-cols-2 gap-20">
+            <button onclick="saveJdbcAConfiguration()" id="saveJdbcAConfigurationBtn"
+                class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                保存数据库A配置
+            </button>
             <button onclick="showPostTableKeyConfigDiv()" id="showPostTableKeyConfigBtn"
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 配置报文-数据字段
@@ -363,11 +379,15 @@
                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                 数据对比
             </button>
+            <button onclick="saveJdbcBConfiguration()" id="saveJdbcBConfigurationBtn"
+                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                保存数据库B配置
+            </button>
         </div>
 
         <!-- 表结果对比结果框 -->
-        <div id="diffTableResultContent" class="col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto hidden">
-            <h3 class="text-lg font-semibold mb-4 text-center">表数据对比结果（Json化）</h3>
+        <div id="diffTableResultContent" class="col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto">
+            <h3 class="text-lg font-semibold mb-4 text-center">表数据对比结果(Json化)</h3>
         </div>
 
         <!-- 表结果原始返回展示框 -->
@@ -387,45 +407,75 @@
     <button id="myBtn">打开模态框</button>
 
     <!-- 模态框 -->
-    <div id="myModal" class="modal">
-
+    <div id="urlSaveModal" class="modal">
         <!-- 模态框内容 -->
         <div class="modal-content col-span-2 bg-white p-6 h-96 rounded-xl shadow-sm overflow-auto">
-            <span class="close">&times;</span>
-            <h2>欢迎来到弹出页面！</h2>
-            <p>这里可以进行互动或展示信息。</p>
-            <button onclick="alert('交互按钮被点击！')">点击我进行互动</button>
+            <span class="close" id="urlSaveDivClose">&times;</span>
+            <h2 class="text-lg font-semibold mb-4 text-center">保存URL配置</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">请求URL</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="saveUrl" class="flex-1 p-2 border rounded" readonly>
+                    </div>
+                    <label class="block text-sm font-medium mb-1">请求头</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="saveHeader" class="flex-1 p-2 border rounded" readonly>
+                    </div>
+                    <label class="block text-sm font-medium mb-1">别名（必填）*</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="saveAliasesUrl" class="flex-1 p-2 border rounded">
+                    </div>
+                </div>
+                <div style="height: auto; text-align: center;">
+                    <button onclick="saveUrlConfig()"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                        保存URL配置
+                    </button>
+                </div>
+            </div>
         </div>
-
     </div>
 
-    <script>
-        // 获取模态框
-        var modal = document.getElementById("myModal");
-
-        // 获取按钮，打开模态框
-        var btn = document.getElementById("myBtn");
-
-        // 获取关闭按钮
-        var span = document.getElementsByClassName("close")[0];
-
-        // 当用户点击按钮，打开模态框
-        btn.onclick = function () {
-            modal.style.display = "block";
-        }
-
-        // 当用户点击关闭按钮，关闭模态框
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        // 当用户在模态框外点击，关闭模态框
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+    <div id="jdbcSaveModal" class="modal">
+        <!-- 模态框内容 -->
+        <div class="modal-content col-span-2 bg-white p-6 h-100 rounded-xl shadow-sm">
+            <span class="close" id="jdbcSaveDivClose">&times;</span>
+            <h2 class="text-lg font-semibold mb-4 text-center">保存JDBC配置</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">JDBC URL</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="saveJdbcUrl" class="flex-1 p-2 border rounded" readonly>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">用户名</label>
+                            <input type="text" id="saveDbUser" class="w-full p-2 border rounded" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">密码</label>
+                            <input type="password" id="saveDbPassword" class="w-full p-2 border rounded" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">数据库类型</label>
+                            <input type="text" id="saveDbType" class="w-full p-2 border rounded" readonly>
+                        </div>
+                    </div>
+                    <label class="block text-sm font-medium mb-1">别名（必填）*</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="saveAliasesJdbc" class="flex-1 p-2 border rounded">
+                    </div>
+                </div>
+                <div style="height: auto; text-align: center;">
+                    <button onclick="saveJdbcConfig()"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                        保存URL配置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="js/main.js"></script>
 </body>
 

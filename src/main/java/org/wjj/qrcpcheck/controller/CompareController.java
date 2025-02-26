@@ -141,11 +141,74 @@ public class CompareController {
 
     @PostMapping("/jdbc-get-configuration")
     public Map<String, Object> getJdbcConfigurationByAliases(@RequestBody Map<String, String> config){
-        String urlAliases = config.get("urlAliases");
-        ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = toolCompareJdbcRegLogic.selectByAliasesJdbc(urlAliases);
+        String jdbcAliases = config.get("jdbcAliases");
+        ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = toolCompareJdbcRegLogic.selectByAliasesJdbc(jdbcAliases);
         Map<String, Object> result = new HashMap<>();
         result.put("status", "success");
         result.put("toolCompareJdbcRegEntity", toolCompareJdbcRegEntity);
+        return result;
+    }
+
+    @PostMapping("/jdbc-save-configuration")
+    public Map<String, Object> saveJdbcConfiguration(@RequestBody Map<String, String> config){
+
+        Map<String, Object> result = new HashMap<>();
+
+        ToolCompareJdbcRegEntity getByIdUrlUser = toolCompareJdbcRegLogic.selectByIdUrlUser(config.get("idUrlUser"));
+        if(getByIdUrlUser != null){
+            result.put("status", "fail");
+            result.put("failInfo", "本配置信息已存在,别名为：" + getByIdUrlUser.getAliasesJdbc());
+            return result;
+        }
+
+        ToolCompareJdbcRegEntity getByJdbcAliases = toolCompareJdbcRegLogic.selectByAliasesJdbc(config.get("jdbcAliases"));
+        if(getByJdbcAliases != null){
+            result.put("status", "fail");
+            result.put("failInfo", "本别名已存在,配置信息为：" + getByJdbcAliases.getIdUrlUser());
+            return result;
+        }
+
+        ToolCompareJdbcRegEntity toolCompareJdbcRegEntity = new ToolCompareJdbcRegEntity();
+
+        toolCompareJdbcRegEntity.setIdUrlUser(config.get("idUrlUser"));
+        toolCompareJdbcRegEntity.setAliasesJdbc(config.get("jdbcAliases"));
+        toolCompareJdbcRegEntity.setUrl(config.get("url"));
+        toolCompareJdbcRegEntity.setJdbcUser(config.get("username"));
+        toolCompareJdbcRegEntity.setJdbcPassword(config.get("password"));
+        toolCompareJdbcRegEntity.setJdbcType(config.get("dbType"));
+
+        toolCompareJdbcRegLogic.insert(toolCompareJdbcRegEntity);
+        result.put("status", "success");
+        result.put("toolCompareJdbcRegEntity", toolCompareJdbcRegEntity);
+        return result;
+    }
+
+    @PostMapping("/url-save-configuration")
+    public Map<String, Object> saveUrlConfiguration(@RequestBody Map<String, String> config){
+
+        Map<String, Object> result = new HashMap<>();
+
+        ToolCompareUrlRegEntity getByIdUrlHeader = toolCompareUrlRegLogic.selectByIdUrlHeader(config.get("idUrlHeader"));
+        if(getByIdUrlHeader != null){
+            result.put("status", "fail");
+            result.put("failInfo", "本配置信息已存在,别名为：" + getByIdUrlHeader.getAliasesUrl());
+            return result;
+        }
+        ToolCompareUrlRegEntity getByAliasesUrl = toolCompareUrlRegLogic.selectByAliasesUrl(config.get("aliasesUrl"));
+        if(getByAliasesUrl != null){
+            result.put("status", "fail");
+            result.put("failInfo", "本别名已存在,配置信息为：" + getByAliasesUrl.getIdUrlHeader());
+            return result;
+        }
+
+        ToolCompareUrlRegEntity toolCompareUrlRegEntity = new ToolCompareUrlRegEntity();
+        toolCompareUrlRegEntity.setAliasesUrl(config.get("aliasesUrl"));
+        toolCompareUrlRegEntity.setIdUrlHeader(config.get("idUrlHeader"));
+        toolCompareUrlRegEntity.setHeader(config.get("header"));
+        toolCompareUrlRegEntity.setUrl(config.get("url"));
+        toolCompareUrlRegLogic.insert(toolCompareUrlRegEntity);
+        result.put("status", "success");
+        result.put("toolCompareUrlRegEntity", toolCompareUrlRegEntity);
         return result;
     }
 

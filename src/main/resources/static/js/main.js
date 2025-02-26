@@ -7,14 +7,34 @@ let isShowDbKeyConfig = false;
 
 const urlAConfigureInput = document.getElementById('configuredURLA');
 const urlBConfigureInput = document.getElementById('configuredURLB');
-const jdbcAConfigureInput = document.getElementById('configuredJDBCA'); 
+const jdbcAConfigureInput = document.getElementById('configuredJDBCA');
 const jdbcBConfigureInput = document.getElementById('configuredJDBCB');
+
+const urlASaveBtn = document.getElementById('saveUrlAConfigurationBtn');
+const urlBSaveBtn = document.getElementById('saveUrlBConfigurationBtn');
+const jdbcASaveBtn = document.getElementById('saveJdbcAConfigurationBtn');
+const jdbcBSaveBtn = document.getElementById('saveJdbcBConfigurationBtn');
+
+const urlModalCloseSpan = document.getElementById('urlSaveDivClose');
+const jdbcModalCloseSpan = document.getElementById('jdbcSaveDivClose');
+
+const urlSaveModal = document.getElementById('urlSaveModal');
+const jdbcSaveModal = document.getElementById('jdbcSaveModal');
+
+const urlSaveModalUrlInput = document.getElementById('saveUrl');
+const urlSaveModalHeaderInput = document.getElementById('saveHeader');
+
+const jdbcSaveModalJdbcUrlInput = document.getElementById('saveJdbcUrl');
+const jdbcSaveModalJdbcUserInput = document.getElementById('saveJdbcUser');
+const jdbcSaveModalJdbcPasswordInput = document.getElementById('saveJdbcPassword');
+const jdbcSaveModalJdbcTypeInput = document.getElementById('saveJdbcType');
+
 
 //周一回来搞
 // urlAConfigureInput.addEventListener('focusout', () => {
 //     if (urlAConfigureInput.value.trim() != '') {
 //         if(urlAConfigureInput.value in urlAliasesList) {
-        
+
 //     }
 // });
 
@@ -75,6 +95,44 @@ document.getElementById('modeToggle').addEventListener('click', () => {
     }
 });
 
+document.getElementById('configuredURLA').addEventListener('blur', fillURLAConfiguration);
+document.getElementById('configuredURLB').addEventListener('blur', fillURLBConfiguration);
+document.getElementById('configuredJDBCA').addEventListener('blur', fillJDBCAConfiguration);
+document.getElementById('configuredJDBCB').addEventListener('blur', fillJDBCBConfiguration);
+
+urlModalCloseSpan.onclick = function () {
+    urlSaveModal.style.display = "none";
+}
+jdbcModalCloseSpan.onclick = function () {
+    jdbcSaveModal.style.display = "none";
+}
+
+urlASaveBtn.onclick = function () {
+    urlSaveModal.style.display = "block";
+
+    urlSaveModalUrlInput.value = document.getElementById('urlA').value;
+    urlSaveModalHeaderInput.value = document.getElementById('headerA').value;
+}
+urlBSaveBtn.onclick = function () {
+    urlSaveModal.style.display = "block";
+    urlSaveModalUrlInput.value = document.getElementById('urlB').value;
+    urlSaveModalHeaderInput.value = document.getElementById('headerB').value;
+}
+jdbcASaveBtn.onclick = function () {
+    jdbcSaveModal.style.display = "block";
+    jdbcSaveModalJdbcUrlInput.value = document.getElementById('jdbcUrlA').value;
+    jdbcSaveModalJdbcUserInput.value = document.getElementById('dbUserA').value;
+    jdbcSaveModalJdbcPasswordInput.value = document.getElementById('dbPasswordA').value;
+    jdbcSaveModalJdbcTypeInput.value = document.querySelector('select[name="dbTpyeSelectA"]').value;
+}
+jdbcBSaveBtn.onclick = function () {
+    jdbcSaveModal.style.display = "block";
+    jdbcSaveModalJdbcUrlInput.value = document.getElementById('jdbcUrlB').value;
+    jdbcSaveModalJdbcUserInput.value = document.getElementById('dbUserB').value;
+    jdbcSaveModalJdbcPasswordInput.value = document.getElementById('dbPasswordB').value;
+    jdbcSaveModalJdbcTypeInput.value = document.querySelector('select[name="dbTpyeSelectB"]').value;
+}
+
 async function sendRequests() {
     const payload = {
         urlA: document.getElementById('urlA').value,
@@ -110,6 +168,12 @@ async function sendRequests() {
         formattedResponses = { A: result.resultA, B: result.resultB };
         differences = JsDiff.createTwoFilesPatch('resutl-A', 'result-B', reponseSortedFormat(formattedResponses.A), reponseSortedFormat(formattedResponses.B));
         displayResponses(differences);
+
+        let urlAbtn = document.getElementById('saveUrlAConfigurationBtn');
+        urlAbtn.classList.remove('hidden');
+        let urlBbtn = document.getElementById('saveUrlBConfigurationBtn');
+        urlAbtn.classList.remove('hidden');
+
     } catch (error) {
         console.error('请求失败:', error);
     }
@@ -459,7 +523,7 @@ function displayTableDataResult(diff) {
     });
 }
 
-async function getUrlConfigurationByUrlAliases(urlAliases){
+async function getUrlConfigurationByUrlAliases(env, urlAliases) {
 
     let urlConfigurationQueryConfig = {
         urlAliases: urlAliases
@@ -473,9 +537,132 @@ async function getUrlConfigurationByUrlAliases(urlAliases){
         });
 
         const tableResult = await response.json();
-        return tableResult.toolCompareUrlRegEntity;
+        fillURLConfigurationByAliases(env, tableResult.toolCompareUrlRegEntity)
 
     } catch (error) {
         console.error('请求失败:', error);
+    }
+}
+
+function fillURLConfigurationByAliases(env, toolCompareUrlRegEntity) {
+    let url = document.getElementById(`url${env}`);
+    let header = document.getElementById(`header${env}`);
+
+    url.value = toolCompareUrlRegEntity.url;
+    header.value = toolCompareUrlRegEntity.header;
+}
+
+function fillURLAConfiguration() {
+    let urlAliases = document.getElementById("configuredURLA").value;
+    let toolCompareUrlRegEntity = getUrlConfigurationByUrlAliases('A', urlAliases);
+    fillURLConfigurationByAliases('A', toolCompareUrlRegEntity);
+}
+
+function fillURLBConfiguration() {
+    let urlAliases = document.getElementById("configuredURLB").value;
+    let toolCompareUrlRegEntity = getUrlConfigurationByUrlAliases('B', urlAliases);
+    fillURLConfigurationByAliases('B', toolCompareUrlRegEntity);
+}
+
+async function getJdbcConfigurationByJdbcAliases(env, jdbcAliases) {
+
+    let jdbcConfigurationQueryConfig = {
+        jdbcAliases: jdbcAliases
+    };
+
+    try {
+        const response = await fetch('/api/jdbc-get-configuration', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: JSON.stringify(jdbcConfigurationQueryConfig)
+        });
+
+        const tableResult = await response.json();
+        fillJDBCConfigurationByAliases(env, tableResult.toolCompareJdbcRegEntity)
+
+    } catch (error) {
+        console.error('请求失败:', error);
+    }
+}
+
+function fillJDBCConfigurationByAliases(env, toolCompareJdbcRegEntity) {
+    let jdbcUrl = document.getElementById(`jdbcUrl${env}`);
+    let jdbcUser = document.getElementById(`dbUser${env}`);
+    let jdbcPassword = document.getElementById(`dbPassword${env}`);
+    // let jdbcType = document.getElementById(`dbType${env}`); todo: 增加jdbcType选择
+
+
+    jdbcUrl.value = toolCompareJdbcRegEntity.url;
+    jdbcUser.value = toolCompareJdbcRegEntity.jdbcUser;
+    jdbcPassword.value = toolCompareJdbcRegEntity.jdbcPassword;
+    // jdbcType.value = toolCompareJdbcRegEntity.jdbcType;
+}
+
+function fillJDBCAConfiguration() {
+    let jdbcAliases = document.getElementById("configuredJDBCA").value;
+    let toolCompareJdbcRegEntity = getJdbcConfigurationByJdbcAliases('A', jdbcAliases);
+    fillJDBCConfigurationByAliases('A', toolCompareJdbcRegEntity);
+}
+
+function fillJDBCBConfiguration() {
+    let jdbcAliases = document.getElementById("configuredJDBCB").value;
+    let toolCompareJdbcRegEntity = getJdbcConfigurationByJdbcAliases('B', jdbcAliases);
+    fillJDBCConfigurationByAliases('B', toolCompareJdbcRegEntity);
+}
+
+async function saveUrlConfig() {
+    let urlSaveConfig = {
+        url : urlSaveModalUrlInput.value,
+        header : urlSaveModalHeaderInput.value,
+        aliasesUrl: document.getElementById(`saveAliasesUrl`).value,
+        idUrlHeader: urlSaveModalUrlInput.value + "|" + urlSaveModalHeaderInput.value
+    };
+
+    if(urlSaveModalUrlInput.value === "" || urlSaveModalHeaderInput.value === "" || document.getElementById(`saveAliasesUrl`).value === "") {
+        alert("请填写完整URL配置信息,别名不允许为空!")
+    }
+
+    const urlSaveResponse = await fetch('/api/url-save-configuration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        body: JSON.stringify(urlSaveConfig)
+    });
+
+    if (urlSaveResponse.status === 'success') {
+        urlSaveModal.style.display = "none";
+        alert("URL配置保存成功!");
+    } else {
+        alert('URL配置保存失败:' + urlSaveResponse.failInfo);
+    }
+}
+
+async function saveJdbcConfig() {
+
+    let urlSaveConfig = {
+        env: env,
+        url: document.getElementById(`jdbcUrl${env}`).value,
+        username: document.getElementById(`dbUser${env}`).value,
+        password: document.getElementById(`dbPassword${env}`).value,
+        dbType: document.querySelector(`select[name="dbTpyeSelect${env}"]`).value,
+        urlAlias: document.getElementById(`configuredURL${env}`).value,
+    };
+
+    const uralSaveResponse = await fetch('/api/url-save-configuration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        body: JSON.stringify(urlSaveConfig)
+    });
+
+    const tableColumnResult = await tableColumnResponse.json();
+    if (tableColumnResult.status === 'success') {
+        let tableKeyList = document.getElementById(`tableKeyList${env}`);
+        tableKeyList.innerHTML = '';
+        tableColumnResult.tableColumns.forEach(key => {
+            let option = document.createElement('option');
+            option.value = key;
+            tableKeyList.appendChild(option);
+        });
+    } else {
+        alert(`获取表内列名失败: ${tableColumnResult.message}，环境：${env}`);
     }
 }
