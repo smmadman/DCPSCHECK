@@ -524,6 +524,9 @@ function displayTableDataResult(diff) {
 }
 
 async function getUrlConfigurationByUrlAliases(env, urlAliases) {
+    if(urlAliases.trim() === "") {
+        return;
+    }
 
     let urlConfigurationQueryConfig = {
         urlAliases: urlAliases
@@ -555,16 +558,30 @@ function fillURLConfigurationByAliases(env, toolCompareUrlRegEntity) {
 function fillURLAConfiguration() {
     let urlAliases = document.getElementById("configuredURLA").value;
     let toolCompareUrlRegEntity = getUrlConfigurationByUrlAliases('A', urlAliases);
+
+    if(urlAliases.trim() === "") {
+        return;
+    }
+
     fillURLConfigurationByAliases('A', toolCompareUrlRegEntity);
 }
 
 function fillURLBConfiguration() {
     let urlAliases = document.getElementById("configuredURLB").value;
     let toolCompareUrlRegEntity = getUrlConfigurationByUrlAliases('B', urlAliases);
+
+    if(urlAliases.trim() === "") {
+        return;
+    }
+
     fillURLConfigurationByAliases('B', toolCompareUrlRegEntity);
 }
 
 async function getJdbcConfigurationByJdbcAliases(env, jdbcAliases) {
+
+    if(jdbcAliases.trim() === "") {
+        return;
+    }
 
     let jdbcConfigurationQueryConfig = {
         jdbcAliases: jdbcAliases
@@ -589,24 +606,34 @@ function fillJDBCConfigurationByAliases(env, toolCompareJdbcRegEntity) {
     let jdbcUrl = document.getElementById(`jdbcUrl${env}`);
     let jdbcUser = document.getElementById(`dbUser${env}`);
     let jdbcPassword = document.getElementById(`dbPassword${env}`);
-    // let jdbcType = document.getElementById(`dbType${env}`); todo: 增加jdbcType选择
+    let jdbcType = document.getElementById(`dbTypeSelect${env}`);
 
 
     jdbcUrl.value = toolCompareJdbcRegEntity.url;
     jdbcUser.value = toolCompareJdbcRegEntity.jdbcUser;
     jdbcPassword.value = toolCompareJdbcRegEntity.jdbcPassword;
-    // jdbcType.value = toolCompareJdbcRegEntity.jdbcType;
+    jdbcType.value = toolCompareJdbcRegEntity.jdbcType;
 }
 
 function fillJDBCAConfiguration() {
     let jdbcAliases = document.getElementById("configuredJDBCA").value;
     let toolCompareJdbcRegEntity = getJdbcConfigurationByJdbcAliases('A', jdbcAliases);
+
+    if(jdbcAliases.trim() === "") {
+        return;
+    }
+
     fillJDBCConfigurationByAliases('A', toolCompareJdbcRegEntity);
 }
 
 function fillJDBCBConfiguration() {
     let jdbcAliases = document.getElementById("configuredJDBCB").value;
     let toolCompareJdbcRegEntity = getJdbcConfigurationByJdbcAliases('B', jdbcAliases);
+
+    if(jdbcAliases.trim() === "") {
+        return;
+    }
+
     fillJDBCConfigurationByAliases('B', toolCompareJdbcRegEntity);
 }
 
